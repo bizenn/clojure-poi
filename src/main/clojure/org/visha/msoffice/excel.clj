@@ -2,7 +2,7 @@
 (ns org.visha.msoffice.excel
   "Wrapper library on Apache POI HSSF and XSSF."
   (:use [clojure.java.io :only [file input-stream]])
-  (:import (org.apache.poi.ss.usermodel WorkbookFactory)
+  (:import (org.apache.poi.ss.usermodel WorkbookFactory Cell)
            (java.io File InputStream)))
 
 (defmulti workbook class)
@@ -25,3 +25,17 @@
 (defn sheet-seq [s] (iterator-seq (.iterator s)))
 
 (defn row-seq [r] (iterator-seq (.iterator r)))
+
+(defmulti cell-value #(.getCellType %))
+(defmethod cell-value Cell/CELL_TYPE_NUMERIC [cell]
+  (.getNumericCellValue cell))
+(defmethod cell-value Cell/CELL_TYPE_STRING [cell]
+  (.getStringCellValue cell))
+(defmethod cell-value Cell/CELL_TYPE_FORMULA [cell]
+  (.getFormulaCellValue cell))
+(defmethod cell-value Cell/CELL_TYPE_BLANK [cell]
+  nil)
+(defmethod cell-value Cell/CELL_TYPE_BOOLEAN [cell]
+  (.getBooleanCellValue cell))
+(defmethod cell-value Cell/CELL_TYPE_ERROR [cell]
+  (.getErrorCellValue cell))
