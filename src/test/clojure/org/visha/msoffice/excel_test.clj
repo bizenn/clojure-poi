@@ -8,12 +8,16 @@
   (let [w (workbook (ClassLoader/getSystemResourceAsStream "sample.xls"))]
     (is (isa? (class w) Workbook))
     (is (= (class w) org.apache.poi.hssf.usermodel.HSSFWorkbook))
-    ))
+    (let [sheets (workbook-seq w)]
+      (is (seq? sheets))
+      )))
 
 (deftest test_xlsx-workbook-seq []
   (let [w (workbook (ClassLoader/getSystemResourceAsStream "sample.xlsx"))]
     (is (isa? (class w) Workbook))
     (is (= (class w) org.apache.poi.xssf.usermodel.XSSFWorkbook))
-    ))
+    (let [sheets (workbook-seq w)]
+      (is (seq? sheets))
+      )))
 
 (run-tests)
