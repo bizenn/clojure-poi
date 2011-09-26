@@ -4,7 +4,7 @@
         [org.visha.msoffice.excel])
   (:import (org.apache.poi.ss.usermodel Workbook Sheet Row Cell)))
 
-(def *values*
+(def sample-values
   '((1.0 "テレキャスター" "Fender")
     (2.0 "ストラトキャスター" "Fender")
     (3.0 "レスポール・スタンダード" "Gibson")))
@@ -20,7 +20,7 @@
         (is (= (class sheet) org.apache.poi.hssf.usermodel.HSSFSheet))
         (let [rows (sheet-seq sheet)]
           (is (seq? rows))
-          (doseq [[row row-values] (map list rows *values*)]
+          (doseq [[row row-values] (map list rows sample-values)]
             (is (isa? (class row) Row))
             (is (= (class row) org.apache.poi.hssf.usermodel.HSSFRow))
             (let [cells (row-seq row)]
@@ -42,7 +42,7 @@
         (is (= (class sheet) org.apache.poi.xssf.usermodel.XSSFSheet))
         (let [rows (sheet-seq sheet)]
           (is (seq? rows))
-          (doseq [[row row-values] (map list rows *values*)]
+          (doseq [[row row-values] (map list rows sample-values)]
             (is (isa? (class row) Row))
             (is (= (class row) org.apache.poi.xssf.usermodel.XSSFRow))
             (let [cells (row-seq row)]
