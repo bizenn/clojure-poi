@@ -9,6 +9,9 @@
     (2.0 "ストラトキャスター" "Fender")
     (3.0 "レスポール・スタンダード" "Gibson")))
 
+(deftest test_cell-value []
+  (is (= (nil? (cell-value nil)))))
+
 (deftest test_xls-workbook-seq []
   (let [w (workbook (ClassLoader/getSystemResourceAsStream "sample.xls"))]
     (is (isa? (class w) Workbook))

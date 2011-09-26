@@ -26,7 +26,9 @@
 
 (defn row-seq [r] (iterator-seq (.iterator r)))
 
-(defmulti cell-value #(.getCellType %))
+(defmulti cell-value (fn [c] (if (nil? c) nil (.getCellType c))))
+(defmethod cell-value nil [cell]
+  nil)
 (defmethod cell-value Cell/CELL_TYPE_NUMERIC [cell]
   (.getNumericCellValue cell))
 (defmethod cell-value Cell/CELL_TYPE_STRING [cell]
