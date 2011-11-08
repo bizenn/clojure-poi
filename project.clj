@@ -8,4 +8,4 @@
   :test-path "src/test/clojure"
   :resources-path "src/main/resources"
   :dev-resources-path "src/test/resources"
-  :disable-deps-clean false)
+  :repl-init-script "src/main/script/swank-init.clj")
