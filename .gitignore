@@ -1,1 +1,4 @@
 target
+lib
+*.jar
+.lein-failures
