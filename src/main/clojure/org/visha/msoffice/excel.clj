@@ -5,7 +5,9 @@
   (:import (org.apache.poi.ss.usermodel WorkbookFactory Cell)
            (java.io File InputStream)))
 
-(defmulti workbook class)
+(defmulti workbook
+  "Read from String(filename)/File/InputStream and return a workbook."
+  class)
 (defmethod workbook InputStream [input]
   (with-open [in input]
     (WorkbookFactory/create in)))
@@ -15,18 +17,25 @@
   (workbook (file filename)))
 
 (defn workbook-seq
+  "Handle a workbook as lazy sequence of sheets"
   ([wb] (workbook-seq wb (.getNumberOfSheets wb) 0))
   ([wb number-of-sheets index]
-     (if (= index number-of-sheets)
+     (if (>= index number-of-sheets)
        ()
        (lazy-seq
         (cons (.getSheetAt wb index) (workbook-seq wb number-of-sheets (inc index)))))))
 
-(defn sheet-seq [s] (iterator-seq (.iterator s)))
+(defn sheet-seq
+  "Handle a sheet as lazy sequence of rows."
+  [s] (iterator-seq (.iterator s)))
 
-(defn row-seq [r] (iterator-seq (.iterator r)))
+(defn row-seq
+  "Handle a row as lazy sequence of cells."
+  [r] (iterator-seq (.iterator r)))
 
-(defmulti cell-value (fn [c] (if (nil? c) nil (.getCellType c))))
+(defmulti cell-value
+  "Get cell value as a proper type one."
+  (fn [c] (if (nil? c) nil (.getCellType c))))
 (defmethod cell-value nil [cell]
   nil)
 (defmethod cell-value Cell/CELL_TYPE_NUMERIC [cell]
